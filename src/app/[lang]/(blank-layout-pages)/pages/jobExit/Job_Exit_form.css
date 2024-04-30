@@ -1,0 +1,24 @@
+input[type="radio"] {
+    display: none;
+}
+.radioLable {
+    position: relative;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.8em;
+    border: 2px solid;
+    padding: 0.5em 1em;
+    border-radius: 50%;
+    /* Make the border-radius 50% to create a circle */
+}
+.radioLable:hover {
+    background-color: #2E69FF;
+    /* Change to the desired background color on hover */
+    color: #fff;
+    /* Change to the desired text color on hover */
+}
+input[type="radio"]:checked+.radioLable {
+    background-color: #2E69FF;
+    color: #FFFFFF;
+}
