@@ -9,6 +9,7 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@floating-ui/react": "^0.26.12",
@@ -26,6 +27,7 @@
     "@mui/material-nextjs": "^5.15.11",
     "@mui/system": "^5.15.15",
     "@mui/x-date-pickers": "^7.2.0",
+    "@prisma/client": "^5.13.0",
     "apexcharts": "^3.49.0",
     "autoprefixer": "10.4.16",
     "axios": "^1.6.8",
@@ -36,6 +38,7 @@
     "express": "^4.19.2",
     "jspdf-autotable": "^3.8.2",
     "material-react-table": "^2.13.0",
+    "material-table": "^2.0.5",
     "negotiator": "^0.6.3",
     "next": "^13.0.6",
     "next-auth": "^4.24.7",
