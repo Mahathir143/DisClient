@@ -78,7 +78,7 @@ const VerticalMenu = ({ dictionary, scrollMenu }) => {
       const onlyActiveTables = activeViewTables.map((table) => ({
         Tables: table.tables
       }));
-      console.log('onlyActiveTables', tables);
+      console.log('onlyActiveTables', onlyActiveTables);
       const filterAddedTables = menus.filter(item => {
         return onlyActiveTables.some(table => {
           // Check if item.Tables is an object with a menu property
@@ -90,7 +90,7 @@ const VerticalMenu = ({ dictionary, scrollMenu }) => {
         });
       });
       console.log('filterAddedTables', filterAddedTables);
-      const newFilteredAddedTables = menus.filter(table => {
+      const newFilteredAddedTables = filterAddedTables.filter(table => {
         return getPermissions.some(item => {
           if (typeof table.Tables === 'object' && table.Tables.menu) {
             return item.table === table.Tables.menu && item.read === 1;
@@ -535,6 +535,7 @@ const VerticalMenu = ({ dictionary, scrollMenu }) => {
           <SubMenu label="Configurations" icon={<i class="ri-settings-5-fill"></i>} suffix={<Chip label={configTables.length} size='small' color='error' />}>
 
             <MenuItem href={`/${locale}/${'pages/RelationPage'}`} >relation</MenuItem>
+            <MenuItem href={`/${locale}/${'apps/Restrictions'}`}  >view restriction</MenuItem>
 
           </SubMenu>
         ) : null}

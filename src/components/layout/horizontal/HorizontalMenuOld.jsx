@@ -2,10 +2,11 @@
 'use client'
 
 // Next Imports
+import { useEffect, useState } from 'react';
+
 import { useParams } from 'next/navigation'
 
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 // MUI Imports
@@ -52,9 +53,8 @@ const HorizontalMenu = ({ dictionary }) => {
   const params = useParams()
 
 
-
+  const storedRole = localStorage.getItem("role");
   const { isBreakpointReached } = useVerticalNav()
-  const [storedRole, setStoredRole] = useState(null);
   const [tablesType, setTablesType] = useState([]);
   const [NewTables, setNewTables] = useState([]);
   const [executebleFields, setExecutablefields] = useState([]);
@@ -70,14 +70,14 @@ const HorizontalMenu = ({ dictionary }) => {
   const { lang: locale, id } = params
 
 
-  const init = async (schemaName, roleName) => {
+  const init = async (schemaName) => {
     try {
       const tables = await loadTables(schemaName);
       const executables = await loadStoredProcedure(schemaName);
       const externalLinks = await loadExternalLinks(schemaName);
       const others = await loadOthers(schemaName);
       const config = await loadConfigurations(schemaName);
-      const getRoleId = await loadRoleTable(schemaName, roleName);
+      const getRoleId = await loadRoleTable(schemaName, storedRole);
 
       const getPermissions = await loadPermissionTables(schemaName, getRoleId.id);
 
@@ -118,7 +118,7 @@ const HorizontalMenu = ({ dictionary }) => {
 
       console.log('filterAddedTables', filterAddedTables);
 
-      const newFilteredAddedTables = menus.filter(table => {
+      const newFilteredAddedTables = filterAddedTables.filter(table => {
         return getPermissions.some(item => {
           if (typeof table.Tables === 'object' && table.Tables.menu) {
             return item.table === table.Tables.menu && item.read === 1;
@@ -130,10 +130,9 @@ const HorizontalMenu = ({ dictionary }) => {
 
       console.log('newFilteredAddedTables', newFilteredAddedTables);
 
-      if (roleName === 'SA') {
+      if (storedRole === 'SA') {
 
         const OnlyTables = menus.filter((table) => table.type === 'T');
-        console.log('only tables', OnlyTables);
         const OnlyExecutables = menus.filter((table) => table.type === 'E');
         const OnlyExtlinks = menus.filter((table) => table.type === 'EL');
 
@@ -141,24 +140,31 @@ const HorizontalMenu = ({ dictionary }) => {
         const transformedData = OnlyTables.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables);
-          return {
-            title: item.TableComment === "" ? item.Tables : item.TableComment,
-            path: `/pages/table?id=` + item.Tables,
+          
+return {
+            title: item.Tables,
+            path: `/pages/table?id=` + uniqueValue,
             link: uniqueValue // Use the unique value as the link
           };
         });
+
         setTablesType(transformedData)
 
         const transformedExecuteData = OnlyExecutables.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables);
-          return {
+          
+return {
             title: item.Tables,
-            path: `/pages/executable?id=` + item.Tables,
+            path: `/pages/executable?id=` + uniqueValue,
             link: uniqueValue // Use the unique value as the link
           };
         });
@@ -168,6 +174,8 @@ const HorizontalMenu = ({ dictionary }) => {
         const transformedExternalLinks = OnlyExtlinks.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables.link);
 
@@ -182,7 +190,7 @@ const HorizontalMenu = ({ dictionary }) => {
 
         console.log('only ext links', OnlyExtlinks);
 
-      } else if (roleName === 'AD') {
+      } else if (storedRole === 'AD') {
         const OnlyTables = filterAddedTables.filter((table) => table.type === 'T');
         const OnlyExecutables = filterAddedTables.filter((table) => table.type === 'E');
         const OnlyExtlinks = filterAddedTables.filter((table) => table.type === 'EL');
@@ -190,24 +198,31 @@ const HorizontalMenu = ({ dictionary }) => {
         const transformedData = OnlyTables.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables);
-          return {
-            title: item.TableComment === "" ? item.Tables : item.TableComment,
-            path: `/pages/table?id=` + item.Tables,
+          
+return {
+            title: item.Tables,
+            path: `/pages/table?id=` + uniqueValue,
             link: uniqueValue // Use the unique value as the link
           };
         });
+
         setTablesType(transformedData)
 
         const transformedExecuteData = OnlyExecutables.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables);
-          return {
+          
+return {
             title: item.Tables,
-            path: `/pages/executable?id=` + item.Tables,
+            path: `/pages/executable?id=` + uniqueValue,
             link: uniqueValue // Use the unique value as the link
           };
         });
@@ -217,6 +232,8 @@ const HorizontalMenu = ({ dictionary }) => {
         const transformedExternalLinks = OnlyExtlinks.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables.link);
 
@@ -234,28 +251,36 @@ const HorizontalMenu = ({ dictionary }) => {
         const OnlyTables = newFilteredAddedTables.filter((table) => table.type === 'T');
         const OnlyExecutables = newFilteredAddedTables.filter((table) => table.type === 'E');
         const OnlyExtlinks = newFilteredAddedTables.filter((table) => table.type === 'EL');
+
         const transformedData = OnlyTables.map((item) => {
 
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables);
-          return {
-            title: item.TableComment === "" ? item.Tables : item.TableComment,
-            path: `/pages/table?id=` + item.Tables,
+          
+return {
+            title: item.Tables,
+            path: `/pages/table?id=` + uniqueValue,
             link: uniqueValue // Use the unique value as the link
           };
         });
+
         setTablesType(transformedData);
 
         const transformedExecuteData = OnlyExecutables.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables);
-          return {
+          
+return {
             title: item.Tables,
-            path: `/pages/executable?id=` + item.Tables,
+            path: `/pages/executable?id=` + uniqueValue,
             link: uniqueValue // Use the unique value as the link
           };
         });
@@ -265,6 +290,8 @@ const HorizontalMenu = ({ dictionary }) => {
         const transformedExtLinks = OnlyExtlinks.map((item) => {
           // Generate a random unique value
           const uniqueValue = uuidv4();
+
+
           // Set the unique value in localStorage for each item
           localStorage.setItem(uniqueValue, item.Tables.link);
 
@@ -276,6 +303,7 @@ const HorizontalMenu = ({ dictionary }) => {
         });
 
         setExternalLinks(transformedExtLinks)
+
         //console.log('transformed ext links', transformedExtLinks);
       }
 
@@ -289,7 +317,9 @@ const HorizontalMenu = ({ dictionary }) => {
   const loadViewResTables = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getViewRestrictions`);
-      return response.data;
+
+      
+return response.data;
     } catch (error) {
       console.log('error');
     }
@@ -297,9 +327,12 @@ const HorizontalMenu = ({ dictionary }) => {
 
   const loadPermissionTables = async (schemaName, roleId) => {
     debugger;
+
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getPermissionTable/${schemaName}/${roleId}`);
-      return response.data;
+
+      
+return response.data;
     } catch (error) {
       console.log('error');
     }
@@ -308,11 +341,12 @@ const HorizontalMenu = ({ dictionary }) => {
 
   const loadTables = async (schemaName) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getTables/${schemaName}`);
+      const response = await axios.get(`http://localhost:5000/api/getTables/${schemaName}`);
       const tablesArray = response.data;
+
       console.log('tables array', tablesArray);
+
       const tables = tablesArray.map((item) => ({
-        TableComment: item.TABLE_COMMENT,
         Tables: item.Tables,
         haveId: item.haveId,
         type: 'T'
@@ -324,11 +358,14 @@ const HorizontalMenu = ({ dictionary }) => {
 
         // Generate a random unique value
         const uniqueValue = uuidv4();
+
+
         // Set the unique value in localStorage for each item
         localStorage.setItem(uniqueValue, item.Tables);
-        return {
+        
+return {
           title: item.Tables,
-          path: `/pages/table?id=` + item.Tables,
+          path: `/pages/table?id=` + uniqueValue,
           link: uniqueValue // Use the unique value as the link
         };
       });
@@ -337,7 +374,8 @@ const HorizontalMenu = ({ dictionary }) => {
       // transformData(newTables);
       //return transformedData;
       setNewTables(transformedData);
-      return tables
+      
+return tables
     } catch (error) {
       console.error('Error loading tables:', error);
     }
@@ -345,10 +383,13 @@ const HorizontalMenu = ({ dictionary }) => {
 
   const loadRoleTable = async (schemaName, roleCode) => {
     debugger;
+
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getRoles/${schemaName}/${roleCode}`);
       const roleId = response.data;
-      return roleId[0]
+
+      
+return roleId[0]
     } catch (error) {
       console.log('error');
     }
@@ -356,14 +397,17 @@ const HorizontalMenu = ({ dictionary }) => {
 
   const loadStoredProcedure = async (schemaName) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getExecutableTables/${schemaName}`);
+      const response = await axios.get(`http://localhost:5000/api/getExecutableTables/${schemaName}`);
       const tablesArray = response.data;
+
       console.log('ExecuteblesRes', tablesArray);
+
       const executebles = tablesArray.map((item) => ({
         Tables: item.name,
         haveId: 1,
         type: 'E'
       }));
+
       console.log('Executebles', executebles);
 
       return executebles
@@ -374,18 +418,21 @@ const HorizontalMenu = ({ dictionary }) => {
 
   const loadExternalLinks = async (schemaName) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getExternalLinks/${schemaName}`);
+      const response = await axios.get(`http://localhost:5000/api/getExternalLinks/${schemaName}`);
       const tablesArray = response.data;
+
       const externalLinks = tablesArray.map((item) => ({
         Tables: item,
         haveId: 1,
         type: 'EL'
       }));
+
       const externalLinksFilter = tablesArray.map((item) => ({
         Tables: item.menu,
         haveId: 1,
         type: 'EL'
       }));
+
       console.log('external links', response.data);
 
       //setExternalLinks(transformedData);
@@ -397,8 +444,9 @@ const HorizontalMenu = ({ dictionary }) => {
 
   const loadOthers = async (schemaName) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_REACT_APP_API_URL}api/getTableOthers/${schemaName}`);
+      const response = await axios.get(`http://localhost:5000/api/getTableOthers/${schemaName}`);
       const tablesArray = response.data;
+
       console.log('OthersRes', tablesArray);
 
       const transformedData = tablesArray.map((item) => {
@@ -409,10 +457,13 @@ const HorizontalMenu = ({ dictionary }) => {
 
         };
       });
+
+
       //transformedData.unshift({ "sectionTitle": "Others" });
       console.log('Others table', transformedData);
       setOtherTables(transformedData);
-      return tablesArray
+      
+return tablesArray
 
 
 
@@ -438,52 +489,43 @@ const HorizontalMenu = ({ dictionary }) => {
           "is_active": 1
         }
       ];
+
       const configs = tablesArray.map((item) => ({
         Tables: item.name,
         haveId: 1,
         type: 'O'
       }));
+
       console.log('configs', configs);
       setConfigTables(configs);
+
       const transformedData = configs.map((item) => {
         const uniqueValue = uuidv4();
+
         localStorage.setItem(uniqueValue, item.Tables);
-        return {
+        
+return {
           title: item.Tables,
           path: `/config?id=` + uniqueValue,
 
           link: uniqueValue
         };
       });
+
       transformedData.unshift({ "sectionTitle": "Configs" });
-      return transformedData;
+      
+return transformedData;
     } catch (error) {
       console.error('Error loading tables:', error);
     }
   };
 
-  const getTableComment = async (tableName) => {
-
-    try {
-      const response = await axios.get(process.env.NEXT_PUBLIC_REACT_APP_API_URL + `api/getTableComments/${selectedSchema}/${tableName}`);
-      //setTableComment(response.data[0].table_comment);
-      console.log("table comment", response.data[0].table_comment);
-
-    } catch (error) {
-      console.error('Error loading comments:', error);
-    }
-  };
-
   useEffect(() => {
     const storedSchema = localStorage.getItem("company");
-    // Access localStorage only on the client-side
-    const role = localStorage.getItem("role");
-    setSelectedSchema(storedSchema);
-    init(storedSchema, role);
-    loadViewResTables();
-    //getTableComment();
-    setStoredRole(role);
 
+    setSelectedSchema(storedSchema);
+    init(storedSchema);
+    loadViewResTables();
   }, []);
 
   return (
@@ -517,37 +559,31 @@ const HorizontalMenu = ({ dictionary }) => {
         <SubMenu label="Tables" icon={<i className='ri-table-alt-line' />}>
 
           {tablesType.map((item) => (
-            <MenuItem href={`/${locale}/${item.path}`} icon={<i className='ri-table-2' />}>{item.title.replace(/_/g, ' ').replace(/\b\w/g, firstLetter => firstLetter.toUpperCase())}</MenuItem>
+            <MenuItem href={`/${locale}/${item.path}`} icon={<i className='ri-table-2' />}>{item.title}</MenuItem>
           ))}
 
         </SubMenu>
 
-        {executebleFields.length > 0 ? (
-          <SubMenu label="Executables" icon={<i className='ri-bill-line' />}>
+        <SubMenu label="Executables" icon={<i className='ri-bill-line' />}>
 
-            {executebleFields.map((item) => (
-              <MenuItem href={`/${locale}/${item.path}`}>{item.title.replace(/_/g, ' ').replace(/\b\w/g, firstLetter => firstLetter.toUpperCase())}</MenuItem>
-            ))}
+          {executebleFields.map((item) => (
+            <MenuItem href={`/${locale}/${item.path}`}>{item.title}</MenuItem>
+          ))}
 
-          </SubMenu>
-        ) : null}
+        </SubMenu>
 
-        {storedRole === 'SA' || storedRole === 'AD' ? (
-          <SubMenu label="Users" icon={<i className='ri-user-line' />}>
-            <MenuItem href={`/${locale}/${'apps/user/list'}`} icon={<i className='ri-user-settings-line' />}>Users</MenuItem>
-            <MenuItem href={`/${locale}/${'apps/roles'}`} icon={<i className='ri-lock-line' />}>Permissions</MenuItem>
+        <SubMenu label="Users" icon={<i className='ri-user-line' />}>
+          <MenuItem href={`/${locale}/${'apps/user/list'}`} icon={<i className='ri-user-settings-line' />}>Users</MenuItem>
+          <MenuItem href={`/${locale}/${'apps/roles'}`} icon={<i className='ri-lock-line' />}>Permissions</MenuItem>
 
-          </SubMenu>
-        ) : null}
+        </SubMenu>
 
-        {ExternalLinks.length > 0 ? (
-          <SubMenu label="External Links" icon={<i className='ri-link' />}>
-            {ExternalLinks.map((item) => (
-              <MenuItem href={`/${locale}/${item.path}`} >{item.title}</MenuItem>
-            ))}
-
-          </SubMenu>
-        ) : null}
+        <SubMenu label="External Links" icon={<i className='ri-link' />}>
+          {ExternalLinks.map((item) => (
+            <MenuItem href={`/${locale}/${item.path}`} >{item.title}</MenuItem>
+          ))}
+          
+        </SubMenu>
 
         <SubMenu label="Others" icon={<i className='ri-more-line' />}>
           {otherTables.map((item) => (
@@ -555,11 +591,10 @@ const HorizontalMenu = ({ dictionary }) => {
           ))}
         </SubMenu>
 
-        {storedRole === 'SA' ? (
-          <SubMenu label="Configurations" icon={<i class="ri-settings-5-fill"></i>} >
-            <MenuItem href={`/${locale}/${'pages/RelationPage'}`} >relation</MenuItem>
-          </SubMenu>
-        ) : null}
+        <SubMenu label="Configurations" icon={<i class="ri-settings-5-fill"></i>} >
+          <MenuItem href={`/${locale}/${'pages/RelationPage'}`} >relation</MenuItem>
+          <MenuItem href={`/${locale}/${'apps/Restrictions'}`}  >view restriction</MenuItem>
+        </SubMenu>
       </Menu>
 
     </HorizontalNav>

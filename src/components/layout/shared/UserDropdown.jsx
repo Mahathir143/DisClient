@@ -131,22 +131,22 @@ const UserDropdown = () => {
                     </div>
                   </div>
                   <Divider className='mlb-1' />
-                  {/* <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/user-profile')}>
+                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/user-profile')}>
                     <i className='ri-user-3-line text-[22px]' />
                     <Typography color='text.primary'>My Profile</Typography>
-                  </MenuItem> */}
-                  {/* <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/account-settings')}>
+                  </MenuItem>
+                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/account-settings')}>
                     <i className='ri-settings-4-line text-[22px]' />
                     <Typography color='text.primary'>Settings</Typography>
-                  </MenuItem> */}
-                  {/* <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/pricing')}>
+                  </MenuItem>
+                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/pricing')}>
                     <i className='ri-money-dollar-circle-line text-[22px]' />
                     <Typography color='text.primary'>Pricing</Typography>
-                  </MenuItem> */}
-                  {/* <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/faq')}>
+                  </MenuItem>
+                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e, '/pages/faq')}>
                     <i className='ri-question-line text-[22px]' />
                     <Typography color='text.primary'>FAQ</Typography>
-                  </MenuItem> */}
+                  </MenuItem>
                   <div className='flex items-center plb-2 pli-4'>
                     <Button
                       fullWidth

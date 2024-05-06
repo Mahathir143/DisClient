@@ -6,7 +6,7 @@ import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
-import Table from '@components/table/page';
+//import Table from '@components/table/page';
 import MUItable2 from '@components/MUItable2/page';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -194,7 +194,7 @@ const MUITable = () => {
 
       <Grid item xs={12}>
         <Card>
-          <Table selectedTable={selectedTable} selectedSchema={selectedSchema} onRetrivedRowData={handleRetrivedRowData} tableCrud={tableCrud} isEdit={IsEdit} />
+          <MUItable2 selectedTable={selectedTable} selectedSchema={selectedSchema} onRetrivedRowData={handleRetrivedRowData} tableCrud={tableCrud} isEdit={IsEdit} />
         </Card>
       </Grid>
 

@@ -2,6 +2,7 @@
 
 import Providers from '@components/Providers'
 import BlankLayout from '@layouts/BlankLayout'
+import { CssVarsProvider } from '@mui/system/cssVars';
 
 // Config Imports
 import { i18n } from '@configs/i18n'
@@ -16,8 +17,11 @@ const Layout = ({ children, params }) => {
 
   return (
     <Providers direction={direction}>
+      
       <BlankLayout systemMode={systemMode}>{children}</BlankLayout>
+    
     </Providers>
+    
   )
 }
 

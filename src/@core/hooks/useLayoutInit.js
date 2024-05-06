@@ -13,8 +13,8 @@ import { useSettings } from '@core/hooks/useSettings'
 
 const useLayoutInit = colorSchemeFallback => {
   // Hooks
+  const { mode, setMode, setColorScheme } = useColorScheme();
   const { settings } = useSettings()
-  const { setMode } = useColorScheme()
 
   const [_, updateCookieColorPref] = useCookie('colorPref')
   const isDark = useMedia('(prefers-color-scheme: dark)', colorSchemeFallback === 'dark')

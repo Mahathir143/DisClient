@@ -16,6 +16,7 @@ import HorizontalFooter from '@components/layout/horizontal/Footer'
 import Customizer from '@core/components/customizer'
 import ScrollToTop from '@core/components/scroll-to-top'
 
+
 // Config Imports
 import { i18n } from '@configs/i18n'
 
@@ -32,7 +33,9 @@ const Layout = async ({ children, params }) => {
   const skin = getSkin()
 
   return (
-    <Providers direction={direction}>
+    
+ <Providers direction={direction}>
+  
       <LayoutWrapper
         systemMode={systemMode}
         verticalLayout={
@@ -57,6 +60,8 @@ const Layout = async ({ children, params }) => {
       </ScrollToTop>
       <Customizer dir={direction} />
     </Providers>
+    
+   
   )
 }
 
